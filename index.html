@@ -191,6 +191,54 @@ button,
     from { opacity: 1; transform: scale(1);}
     to   { opacity: 0; transform: scale(0.95);}
 }
+@media (max-width: 600px) {
+    #top-buttons {
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        z-index: 1000;
+    }
+    #top-buttons button {
+        font-size: 1.5em;
+        padding: 8px 10px;
+        margin-left: 0;
+    }
+}@media (max-width: 600px) {
+    #gallery > div > div {
+        width: 90vw !important;
+        max-width: 98vw !important;
+        padding: 8px !important;
+    }
+    #gallery img {
+        height: 120px !important;
+        border-radius: 14px !important;
+    }
+}@media (max-width: 600px) {
+    #main-image  {
+        width: 98vw;
+        max-width: 98vw;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-top: 20px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 0 0 10px #90caf9;
+        transition: box-shadow 0.5s, transform 0.5s;
+    }
+    #map-thumb {
+        position: static;
+        width: 98vw;
+        height: 180px;
+        margin: 10px auto;
+        display: block;
+        transform: none !important;
+    }
+}
 </style>
 </head>
 <body>
