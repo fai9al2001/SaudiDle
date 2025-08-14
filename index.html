@@ -9,8 +9,20 @@
 <style>
 body { font-family: Arial, sans-serif; text-align: center; background: #f4f4f4; margin:0; direction: rtl; }
 #image-container { position: relative; display: inline-block; margin-top: 20px; }
-#main-image { width: 95%; max-width: 1200px; border-radius: 8px; }
-#map-thumb { position: absolute; bottom: 10px; right: 10px; width: 250px; height: 150px;
+#main-image {
+    width: 140vw;
+    max-width: 880px;
+    height: 457px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-top: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 0 10px #90caf9;
+    transition: box-shadow 0.5s, transform 0.5s;
+}
+#map-thumb { position: absolute; bottom: 10px; right: 10px; width: 166px; height: 100px;
              border: 2px solid #ccc; border-radius: 4px; overflow: hidden; cursor: pointer; z-index: 10; transition: transform 0.3s ease; }
 #map-thumb:hover { transform: scale(2); z-index: 11; }
 #popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -25,7 +37,19 @@ body { font-family: Arial, sans-serif; text-align: center; background: #f4f4f4; 
 .quiz button { margin: 5px; padding: 8px 12px; }
 @media (max-width: 600px) {
     #image-container { width: 100%; }
-    #main-image, #winner-image { width: 98%; max-width: 98vw; }
+    #main-image  {
+    width: 60vw;
+    max-width: 350px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-top: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 0 10px #90caf9;
+    transition: box-shadow 0.5s, transform 0.5s;
+}
     #map-thumb {
         position: static;
         width: 98vw;
@@ -49,21 +73,143 @@ body { font-family: Arial, sans-serif; text-align: center; background: #f4f4f4; 
     padding: 12px 18px;
     min-width: 80px;
 }
+.result-card,
+.quiz,
+#popup,
+#win-popup,
+#settings-popup {
+    background: #1F2023 !important;
+    color: #D9D9D9 !important;
+    border-radius: 32px !important; /* Unified roundness for all boxes */
+    border: none !important;
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px);}
+    to   { opacity: 1; transform: translateY(0);}
+}
+#main-image, #winner-image {
+    transition: box-shadow 0.5s, transform 0.5s;
+}
+#main-image:hover, #winner-image:hover {
+    box-shadow: 0 0 30px #90caf9;
+    transform: scale(1.03);
+}
+.quiz button, #popup button, #stats-top-btn, #help-top-btn {
+    transition: background 0.3s, transform 0.3s;
+}
+.quiz button:active, #popup button:active, #stats-top-btn:active, #help-top-btn:active {
+    background: #e3f2fd;
+    transform: scale(1.08);
+}
+body.dark-mode {
+    background: #111 !important;
+    color: #D9D9D9 !important;
+}
+body.dark-mode .result-card,
+body.dark-mode .quiz,
+body.dark-mode #popup,
+body.dark-mode #win-popup,
+body.dark-mode #settings-popup {
+    background: #1F2023 !important;
+    color: #D9D9D9 !important;
+    border-radius: 32px !important; /* Unified roundness for all boxes */
+    border: none !important;
+}
+body.dark-mode #main-image,
+body.dark-mode #map-thumb {
+    box-shadow: 0 0 20px #1F2023;
+    border-color: #1F2023;
+}
+body.dark-mode button,
+body.dark-mode .quiz button,
+body.dark-mode #popup button,
+body.dark-mode #win-popup button,
+body.dark-mode #settings-popup button {
+    background: #222 !important;
+    color: #D9D9D9 !important;
+    border: 1px solid #333 !important;
+}
+body.dark-mode #loading-bar {
+    background: linear-gradient(90deg,#1B9E49,#222) !important;
+}
+button,
+.quiz button,
+#popup button,
+#win-popup button,
+#settings-popup button,
+#hint-btn {
+    font-size: 1.2em;
+    padding: 14px 30px;
+    margin-top: 20px;
+    border-radius: 32px !important;
+}
+#stats-top-btn,
+#help-top-btn,
+#settings-top-btn {
+    border-radius: 32px !important;
+}
+#top-buttons button {
+    background: #222;
+    color: #D9D9D9;
+    border: none;
+    padding: 8px 12px;
+    margin-left: 6px;
+    cursor: pointer;
+    border-radius: 32px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: background 0.3s, transform 0.3s;
+}
+#top-buttons button:active {
+    background: #333;
+    transform: scale(1.08);
+}
+.fade-out {
+    animation: fadeOut 0.3s forwards;
+}
+.fade-in {
+    animation: fadeIn 0.4s;
+}
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+.fade-in {
+    animation: fadeIn 0.4s;
+}
+.fade-out {
+    animation: fadeOut 0.3s forwards;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95);}
+    to   { opacity: 1; transform: scale(1);}
+}
+@keyframes fadeOut {
+    from { opacity: 1; transform: scale(1);}
+    to   { opacity: 0; transform: scale(0.95);}
+}
 </style>
 </head>
 <body>
 
-<h1>Saudile</h1>
-
+<h1 style="color:#1B9E49;">Saudile</h1>
+<!-- Place this just after <body> and before <h1> -->
+<div id="top-buttons" style="position: absolute; top: 18px; right: 18px; z-index: 1000;">
+  <button id="stats-top-btn" title="إحصائيات" style="margin-left:6px; font-size:1.7em;">📊</button>
+  <button id="help-top-btn" title="تعليمات اللعب" style="margin-left:6px; font-size:1.7em;">❓</button>
+  <button id="settings-top-btn" title="إعدادات" style="font-size:1.7em;">⚙️</button>
+</div>
 <div id="image-container">
     <img id="main-image" src="assets/city_1.webp" alt="city image">
-  <img id="winner-image" src="" alt="" style="display:none; width:70%; max-width:700px; border-radius:8px; margin-top:20px; display:block; margin-left:auto; margin-right:auto;">
     <div id="map-thumb"></div>
 </div>
 
 <div id="popup">
     <h2>مرحبًا بك في Saudile</h2>
-    <p>اختر أقرب مدينة في السعودية من خلال الخريطة والصور. لديك 5 محاولات.</p>
+    <p>حاول تخمن المدينة السعودية من خلال الصور واختارها بالخريطة . لديك 5 محاولات ومع كل محاولة هناك صورة جديدة.</p>
     <h3>معاني الإيموجي:</h3>
     <ul>
         <li>🔥 قريب جدًا (بين 11 و 100 كم)</li>
@@ -73,19 +219,99 @@ body { font-family: Arial, sans-serif; text-align: center; background: #f4f4f4; 
     <button onclick="closePopup()">ابدأ</button>
 </div>
 <div id="confirm-message" style="margin-top:10px;"></div>
-
+<div id="settings-popup" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+     background:#111; color:#1B9E49; border-radius:12px; box-shadow:0 0 20px rgba(0,0,0,0.3); z-index:99999; max-width:350px; width:90%; text-align:center; padding:20px;">
+    <h2>الإعدادات</h2>
+    <label style="font-size:1.2em;">
+        <input type="checkbox" id="dark-mode-toggle" checked style="transform:scale(1.3);margin-left:8px;">
+        تفعيل الوضع الليلي (Dark Mode)
+    </label>
+    <br>
+    <button onclick="closeSettingsPopup()" style="margin-top:15px;">إغلاق</button>
+</div>
 <div id="result"></div>
 <div id="quiz"></div>
 
+<button id="hint-btn" style="margin-top:25px;">تلميح</button>
+<div id="hint-message" style="margin-top:15px;"></div>
+<div id="win-popup" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+     background:white; border-radius:12px; box-shadow:0 0 20px rgba(0,0,0,0.3); z-index:99999; max-width:350px; width:90%; text-align:center; padding:20px;">
+    <div id="win-tabs">
+        <button id="tab-default" style="font-weight:bold;">نتيجتك</button>
+        <button id="tab-stats">إحصائيات</button>
+    </div>
+    <div id="win-content-default">
+        <h2>أحسنت!</h2>
+        <p>سلسلتك الحالية: <span id="current-streak">0</span></p>
+        <p>أعلى سلسلة سابقة: <span id="max-streak">0</span></p>
+        <button id="share-btn">مشاركة النتيجة</button>
+    </div>
+    <div id="win-content-stats" style="display:none;">
+        <h3>إحصائيات المحاولات</h3>
+        <div id="horizontal-bar" style="margin:10px 0;"></div>
+        <h3>نسبة النجاح اليوم</h3>
+        <div id="vertical-bar" style="height:120px; display:flex; align-items:flex-end; justify-content:center;"></div>
+    </div>
+    <button onclick="closeWinPopup()" style="margin-top:15px;">إغلاق</button>
+</div>
+<div id="loading-bar-container" style="width:70%;max-width:700px;margin:20px auto 0 auto;display:none;">
+    <div id="loading-bar" style="height:18px;background:#90caf9;border-radius:8px;width:0%;transition:width 1s;"></div>
+</div>
+<div id="gallery" style="display:none; margin: 30px auto; max-width: 900px;"></div>
 
 <script>
-
-
+    
+document.getElementById("hint-btn").onclick = function() {
+    const hintMsg = document.getElementById("hint-message");
+    hintMsg.innerHTML =
+        `<div class="result-card fade-in" style="margin-top:10px;">
+            التلميح: المدينة تقع في منطقة <b>${selectedCity.province}</b>
+        </div>`;
+};
+document.getElementById("stats-top-btn").onclick = function() {
+    showWinPopup();
+};
+document.getElementById("help-top-btn").onclick = function() {
+    showPopup();
+};
 function showPopup() {
-    document.getElementById("popup").style.display = "block";
+    const popup = document.getElementById("popup");
+    popup.classList.remove("fade-out");
+    popup.style.display = "block";
+    popup.classList.add("fade-in");
 }
 function closePopup() {
-    document.getElementById("popup").style.display = "none";
+    const popup = document.getElementById("popup");
+    popup.classList.remove("fade-in");
+    popup.classList.add("fade-out");
+    setTimeout(() => { popup.style.display = "none"; popup.classList.remove("fade-out"); }, 300);
+}
+
+function showWinPopup() {
+    const winPopup = document.getElementById("win-popup");
+    winPopup.classList.remove("fade-out");
+    winPopup.style.display = "block";
+    winPopup.classList.add("fade-in");
+    // ...rest of your code...
+}
+function closeWinPopup() {
+    const winPopup = document.getElementById("win-popup");
+    winPopup.classList.remove("fade-in");
+    winPopup.classList.add("fade-out");
+    setTimeout(() => { winPopup.style.display = "none"; winPopup.classList.remove("fade-out"); }, 300);
+}
+
+function showSettingsPopup() {
+    const settingsPopup = document.getElementById("settings-popup");
+    settingsPopup.classList.remove("fade-out");
+    settingsPopup.style.display = "block";
+    settingsPopup.classList.add("fade-in");
+}
+function closeSettingsPopup() {
+    const settingsPopup = document.getElementById("settings-popup");
+    settingsPopup.classList.remove("fade-in");
+    settingsPopup.classList.add("fade-out");
+    setTimeout(() => { settingsPopup.style.display = "none"; settingsPopup.classList.remove("fade-out"); }, 300);
 }
 window.onload = function() {
     document.getElementById("main-image").src = images[0];
@@ -96,10 +322,19 @@ window.onload = function() {
 let map = L.map('map-thumb', { zoomControl: false, attributionControl: false }).setView([23.8859, 45.0792], 5);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
 
+let userMarker; // Add this at the top of your script (outside any function)
+
 map.on('click', function(e) {
+    // Remove previous marker if exists
+    if (userMarker) {
+        map.removeLayer(userMarker);
+    }
+    // Add marker at clicked location
+    userMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+
     document.getElementById("confirm-message").innerHTML =
         `<div class="result-card">
-            هل أنت متأكد من اختيار هذا الموقع؟
+            هل أنت متأكد ؟
             <br>
             <button id="confirm-btn">تأكيد</button>
             <button id="cancel-btn">إلغاء</button>
@@ -115,22 +350,41 @@ map.on('click', function(e) {
 
 function guessCityByCoords(lat, lng) {
     attempts++;
-    if (currentImage < images.length - 1) {
-        currentImage++;
-        document.getElementById("main-image").src = images[currentImage];
-    }
     let dist = calcDistance(lat, lng, correctCoords[0], correctCoords[1]);
     let arrow = getDirectionArrow(lat, lng, correctCoords[0], correctCoords[1]);
-    if(dist < 10){
-        showResult(true, dist, arrow);
-    } else if(attempts >= 5){
-        showResult(false, dist, arrow);
-    } else {
-        showHint(dist, arrow);
-        showBigEmoji("❌"); // Show big X for every wrong guess
-    }
-}
 
+    // Always show loading bar animation before feedback
+    showLoadingBar(() => {
+        if (dist < selectedCity.radius) {
+    showResult(true, dist, arrow);
+} else if (attempts >= 5) {
+            showResult(false, dist, arrow);
+        } else {
+            showHint(dist, arrow);
+            // Only now, after showing the result, change the image
+            if (currentImage < images.length - 1) {
+                currentImage++;
+                document.getElementById("main-image").src = images[currentImage];
+            }
+        }
+    });
+}
+function showLoadingBar(callback) {
+    const loadingBarContainer = document.getElementById("loading-bar-container");
+    const loadingBar = document.getElementById("loading-bar");
+    loadingBarContainer.style.display = "block";
+    loadingBar.style.width = "0%";
+    loadingBar.style.background = "linear-gradient(90deg,#90caf9,#1976d2)";
+    loadingBar.style.transition = "width 1s cubic-bezier(.4,0,.2,1)";
+    setTimeout(() => {
+        loadingBar.style.width = "100%";
+    }, 50);
+    setTimeout(() => {
+        loadingBarContainer.style.display = "none";
+        loadingBar.style.width = "0%";
+        callback();
+    }, 1100);
+}
 function calcDistance(lat1, lon1, lat2, lon2) {
     function toRad(v) { return v * Math.PI / 180; }
     let R = 6371;
@@ -166,28 +420,33 @@ function getEmojiByDistance(dist) {
 }
 
 function showHint(dist, arrow) {
-    document.getElementById("result").innerHTML = '<div class="result-card">'+getEmojiByDistance(dist)+' '+arrow+'</div>';
+    let emoji = getEmojiByDistance(dist);
+    let feedback = (dist < 10) ? "إجابة صحيحة!" : "إجابة خاطئة!";
+    document.getElementById("result").innerHTML = `
+        <div class="result-card" style="font-size:1.3em;">
+            ${emoji} ${arrow}<br>
+            <span>${feedback}</span>
+        </div>
+    `;
 }
 
 function showResult(win, dist, arrow) {
     if(win){
-        showBigEmoji("✅"); // Show big correct emoji
         document.getElementById("result").innerHTML = `
             <div class="result-card" style="background:#c8e6c9; color:#256029; font-size:1.5em; border:2px solid #388e3c;">
                 ✅ أحسنت! الإجابة صحيحة 🎉<br>${correctCity}
             </div>`;
         document.getElementById("map-thumb").style.display = "none";
         document.getElementById("main-image").style.display = "none";
-        document.getElementById("winner-image").src = selectedCity.winnerImage;
-        document.getElementById("winner-image").style.display = "block";
         showQuiz();
+        showWinPopup();
     } else {
-        showBigEmoji("❌"); // Show big wrong emoji
         document.getElementById("result").innerHTML = `
             <div class="result-card" style="background:#ffcdd2; color:#b71c1c; font-size:1.5em; border:2px solid #b71c1c;">
                 ❌ انتهت المحاولات أو الإجابة خاطئة<br>المدينة الصحيحة: ${correctCity}
             </div>`;
         showQuiz();
+        showGallery(); // <-- Add this line here
     }
 }
 
@@ -212,40 +471,125 @@ function showQuiz(){
             if(selected === correct){
                 this.style.background = "#c8e6c9";
                 this.innerText += " ✅";
-                showBigEmoji("✅");
+                
             } else {
                 this.style.background = "#ffcdd2";
                 this.innerText += " ❌";
-                showBigEmoji("❌");
+                
             }
             document.querySelectorAll(`.quiz-btn[data-q="${qIdx}"]`).forEach(b => b.disabled = true);
         };
     });
 }
 
-function showBigEmoji(emoji) {
-    const overlay = document.createElement('div');
-    overlay.style.position = 'fixed';
-    overlay.style.top = '0';
-    overlay.style.left = '0';
-    overlay.style.width = '100vw';
-    overlay.style.height = '100vh';
-    overlay.style.display = 'flex';
-    overlay.style.alignItems = 'center';
-    overlay.style.justifyContent = 'center';
-    overlay.style.zIndex = '99999';
-    overlay.style.background = 'rgba(255,255,255,0.3)';
-    overlay.innerHTML = `<span style="font-size:8em;">${emoji}</span>`;
-    document.body.appendChild(overlay);
+
+function showWinPopup() {
+    // Streak logic (localStorage)
+    let streak = Number(localStorage.getItem("currentStreak") || 0) + 1;
+    let maxStreak = Math.max(streak, Number(localStorage.getItem("maxStreak") || 0));
+    localStorage.setItem("currentStreak", streak);
+    localStorage.setItem("maxStreak", maxStreak);
+    document.getElementById("current-streak").textContent = streak;
+    document.getElementById("max-streak").textContent = maxStreak;
+
+    // Show popup
+    document.getElementById("win-popup").style.display = "block";
+    document.getElementById("win-content-default").style.display = "block";
+    document.getElementById("win-content-stats").style.display = "none";
+    document.getElementById("tab-default").style.fontWeight = "bold";
+    document.getElementById("tab-stats").style.fontWeight = "normal";
+
+    // Share button
+    document.getElementById("share-btn").onclick = function() {
+        let shareText = `Saudile\nاليوم: ${correctCity}\nعدد المحاولات: ${attempts}\nسلسلتك الحالية: ${streak}\nأعلى سلسلة: ${maxStreak}\nجرب بنفسك: https://yourwebsite.com`;
+        navigator.clipboard.writeText(shareText);
+        this.textContent = "تم النسخ!";
+        setTimeout(() => { this.textContent = "مشاركة النتيجة"; }, 1500);
+    };
+
+    // Tabs
+   document.getElementById("tab-default").onclick = function() {
+    const statsDiv = document.getElementById("win-content-stats");
+    const defaultDiv = document.getElementById("win-content-default");
+    statsDiv.classList.remove("fade-in");
+    statsDiv.classList.add("fade-out");
     setTimeout(() => {
-        document.body.removeChild(overlay);
-    }, 1000);
+        statsDiv.style.display = "none";
+        defaultDiv.style.display = "block";
+        defaultDiv.classList.add("fade-in");
+        document.getElementById("tab-default").style.fontWeight = "bold";
+        document.getElementById("tab-stats").style.fontWeight = "normal";
+        setTimeout(() => defaultDiv.classList.remove("fade-in"), 400);
+        statsDiv.classList.remove("fade-out");
+    }, 300);
+};
+document.getElementById("tab-stats").onclick = function() {
+    const statsDiv = document.getElementById("win-content-stats");
+    const defaultDiv = document.getElementById("win-content-default");
+    defaultDiv.classList.remove("fade-in");
+    defaultDiv.classList.add("fade-out");
+    setTimeout(() => {
+        defaultDiv.style.display = "none";
+        statsDiv.style.display = "block";
+        statsDiv.classList.add("fade-in");
+        document.getElementById("tab-stats").style.fontWeight = "bold";
+        document.getElementById("tab-default").style.fontWeight = "normal";
+        renderStats();
+        setTimeout(() => statsDiv.classList.remove("fade-in"), 400);
+        defaultDiv.classList.remove("fade-out");
+    }, 300);
+};
+}
+function closeWinPopup() {
+    document.getElementById("win-popup").style.display = "none";
+    showGallery();
 }
 
+// Dummy stats for demo (replace with real stats if you have a backend)
+function renderStats() {
+    // Emojis for attempts
+    const attemptEmojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣"];
+    let triesStats = JSON.parse(localStorage.getItem("triesStats") || "[0,0,0,0,0]");
+    triesStats[attempts-1] = (triesStats[attempts-1] || 0) + 1;
+    localStorage.setItem("triesStats", JSON.stringify(triesStats));
+    let total = triesStats.reduce((a,b)=>a+b,0) || 1;
+
+    // Horizontal bar
+    let barHtml = `<div style="text-align:right; margin-bottom:10px;">عدد محاولاتك في الايام السابقة:</div>`;
+    for(let i=0; i<5; i++) {
+        let percent = Math.round(triesStats[i]/total*100);
+        barHtml += `
+        <div style="display:flex; align-items:center; margin-bottom:6px;">
+            <span style="width:40px; font-size:1.5em;">${attemptEmojis[i]}</span>
+            <div style="flex:1; background:#90caf9; height:22px; border-radius:4px; margin:0 8px; position:relative;">
+                <div style="width:${percent}%; background:#1976d2; height:100%; border-radius:4px;"></div>
+            </div>
+            <span style="width:40px; font-size:0.95em;">${triesStats[i]} (${percent}%)</span>
+        </div>`;
+    }
+    document.getElementById("horizontal-bar").innerHTML = barHtml;
+
+    // Vertical bar
+    let vBarHtml = `<div style="display:flex; align-items:flex-end; justify-content:center; height:100px;">`;
+    for(let i=0; i<5; i++) {
+        let percent = Math.round(triesStats[i]/total*100);
+        vBarHtml += `
+        <div style="margin:0 6px; text-align:center;">
+            <div style="background:#a5d6a7; width:32px; height:${percent}px; border-radius:6px 6px 0 0; position:relative;">
+                <span style="position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-size:0.95em;">${percent}%</span>
+            </div>
+            <span style="font-size:1.5em;">${attemptEmojis[i]}</span>
+        </div>`;
+    }
+    vBarHtml += `</div>`;
+    document.getElementById("vertical-bar").innerHTML = vBarHtml;
+}
 const cityData = [
     {
         name: "أبها",
         coords: [18.21639, 42.50528],
+        province: "عسير",
+         radius: 12,
         images: [
             "assets/abha_1.webp",
             "assets/abha_2.webp",
@@ -253,28 +597,27 @@ const cityData = [
             "assets/abha_4.webp",
             "assets/abha_5.webp"
         ],
-        winnerImage: "assets/abha_win.png",
+       imageDescriptions: [
+           "سد أبها يقع في الطرف الغربي لمدينة أبها في جنوب المملكة العربية السعودية، وتم إنشاؤه في عام 1974",
+            "القرية المعلقة في أبها: تقع القرية المعلقة في أبها على حافة منحدرات جبل السروات الشاهقة، وتتميز بإطلالات مذهلة على الطبيعة الجبلية الخلابة",
+            "منتزه عسير الوطني في أبها",
+            "أشجار الجاكرندا في شوارع ومنتزهات مدينة أبها ، التي تتميز عن باقي الأشجار بلونها البنفسجي الجذاب",
+            "ممشى الضباب"
+            ],
         quiz: [
             {
-                question: "كم يبلغ ارتفاع أبها عن سطح البحر؟",
-                options: ["2200 متر", "1500 متر", "800 متر"],
-                correct: "2200 متر"
+                question: "كم يبلغ عدد سكان مدينة أبها؟   ",
+                options: ["اقل من 400 الف نسمة", "اكثر من 500 الف نسمة", " 400 الف -  500 الف"],
+                correct: " 400 الف -  500 الف"
             },
-            {
-                question: "ما اسم أشهر منتزه في أبها؟",
-                options: ["منتزه السودة", "منتزه الملك عبدالعزيز", "منتزه عسير الوطني"],
-                correct: "منتزه السودة"
-            },
-            {
-                question: "ما هو لقب مدينة أبها؟",
-                options: ["عروس الجبل", "مدينة الضباب", "مدينة الورد"],
-                correct: "مدينة الضباب"
-            }
+            
         ]
     },
     {
         name: "الرياض",
         coords: [24.7136, 46.6753],
+        province: "الرياض",
+         radius: 35,
         images: [
             "assets/riyadh_1.webp",
             "assets/riyadh_2.webp",
@@ -282,7 +625,13 @@ const cityData = [
             "assets/riyadh_4.webp",
             "assets/riyadh_5.webp"
         ],
-        winnerImage: "assets/riyadh_win.webp",
+       imageDescriptions: [
+            "الرياض في الليل",
+            "برج المملكة",
+            "الحدائق في الرياض",
+            "شوارع الرياض",
+            "غروب الشمس في الرياض"
+            ],
         quiz: [
             {
                 question: "كم عدد سكان الرياض؟",
@@ -321,7 +670,63 @@ let attempts = 0;
 
 // Set initial image
 
+// Show settings popup
+document.getElementById("settings-top-btn").onclick = function() {
+    document.getElementById("settings-popup").style.display = "block";
+};
+// Close settings popup
+function closeSettingsPopup() {
+    document.getElementById("settings-popup").style.display = "none";
+}
+// Dark mode toggle
+document.getElementById("dark-mode-toggle").onchange = function() {
+    if(this.checked) {
+        document.body.classList.add("dark-mode");
+    } else {
+        document.body.classList.remove("dark-mode");
+    }
+};
+// Enable dark mode by default
+document.body.classList.add("dark-mode");
+document.getElementById("dark-mode-toggle").checked = true;
+// ...all your functions above...
 
+// Set initial image
+window.onload = function() {
+    document.getElementById("main-image").src = images[0];
+    showPopup();
+};
+
+// Button event handlers (add at the end of your script)
+document.getElementById("settings-top-btn").onclick = showSettingsPopup;
+document.getElementById("help-top-btn").onclick = showPopup;
+document.getElementById("stats-top-btn").onclick = showWinPopup;
+function showGallery() {
+    document.getElementById("image-container").style.display = "none";
+    const galleryDiv = document.getElementById("gallery");
+    let html = '<h2 style="color:#1B9E49;">كل الصور لهذا اليوم</h2><div style="display:flex;flex-wrap:wrap;justify-content:center;gap:24px;">';
+
+    // Use the descriptions from the selected city
+    const imageDescriptions = selectedCity.imageDescriptions;
+
+    images.forEach((imgSrc, idx) => {
+        html += `
+        <div style="background:#1F2023;padding:16px;border-radius:32px;width:320px;box-sizing:border-box;">
+    <img src="${imgSrc}" style="width:100%;height:200px;object-fit:cover;border-radius:18px;box-shadow:0 0 12px #222;">
+            <div style="margin-top:8px;color:#D9D9D9;font-size:0.95em;">
+                ${imageDescriptions[idx] || `صورة رقم ${idx+1}`}
+            </div>
+        </div>`;
+    });
+
+    html += '</div>';
+    galleryDiv.innerHTML = html;
+    galleryDiv.style.display = "block";
+}
+function closeWinPopup() {
+    document.getElementById("win-popup").style.display = "none";
+    showGallery();
+}
 </script>
 </body>
 </html>
