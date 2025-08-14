@@ -191,64 +191,98 @@ button,
     from { opacity: 1; transform: scale(1);}
     to   { opacity: 0; transform: scale(0.95);}
 }
+#top-bar {
+    width: 100%;
+    background: #232323;
+    color: #D9D9D9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+    height: 56px;
+    box-sizing: border-box;
+    position: sticky;
+    top: 0;
+    z-index: 1001;
+    border-bottom: 2px solid #444;
+}
+
+#site-title {
+    flex: 1;
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+    color: #1B9E49;
+    letter-spacing: 2px;
+}
+
+#top-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    height: 100%;
+    margin-right: 12px;
+}
+
+#top-buttons button {
+    background: #232323;
+    color: #D9D9D9;
+    border: none;
+    padding: 0;
+    font-size: 1.5em;
+    border-radius: 50%;
+    cursor: pointer;
+    height: 44px;
+    width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 2px;
+    transition: background 0.2s, color 0.2s;
+    box-shadow: none;
+}
+
+#top-buttons button:active,
+#top-buttons button:focus,
+#top-buttons button:hover {
+    background: #444;
+    color: #fff;
+}
+
 @media (max-width: 600px) {
+    #top-bar {
+        height: 44px;
+        padding: 0;
+    }
+    #site-title {
+        font-size: 1.2em;
+        padding: 0 4px;
+    }
     #top-buttons {
-        position: fixed;
-        top: 12px;
-        right: 12px;
-        display: flex;
-        flex-direction: row;
-        gap: 8px;
-        z-index: 1000;
+        margin-right: 4px;
     }
     #top-buttons button {
-        font-size: 1.5em;
-        padding: 8px 10px;
-        margin-left: 0;
-    }
-}@media (max-width: 600px) {
-    #gallery > div > div {
-        width: 90vw !important;
-        max-width: 98vw !important;
-        padding: 8px !important;
-    }
-    #gallery img {
-        height: 120px !important;
-        border-radius: 14px !important;
-    }
-}@media (max-width: 600px) {
-    #main-image  {
-        width: 98vw;
-        max-width: 98vw;
-        height: 180px;
-        object-fit: cover;
-        border-radius: 8px;
-        margin-top: 20px;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        box-shadow: 0 0 10px #90caf9;
-        transition: box-shadow 0.5s, transform 0.5s;
-    }
-    #map-thumb {
-        position: static;
-        width: 98vw;
-        height: 180px;
-        margin: 10px auto;
-        display: block;
-        transform: none !important;
+        font-size: 1em;
+        height: 32px;
+        width: 32px;
+        margin: 0 1px;
     }
 }
 </style>
 </head>
 <body>
-
-<h1 style="color:#1B9E49;">Saudile</h1>
-<!-- Place this just after <body> and before <h1> -->
-<div id="top-buttons" style="position: absolute; top: 18px; right: 18px; z-index: 1000;">
-  <button id="stats-top-btn" title="إحصائيات" style="margin-left:6px; font-size:1.7em;">📊</button>
-  <button id="help-top-btn" title="تعليمات اللعب" style="margin-left:6px; font-size:1.7em;">❓</button>
-  <button id="settings-top-btn" title="إعدادات" style="font-size:1.7em;">⚙️</button>
+  <div id="top-bar">
+  <div style="width:44px;"></div> <!-- Spacer to balance the buttons -->
+  <div id="site-title">Saudile</div>
+  <div id="top-buttons">
+    <button id="stats-top-btn" title="إحصائيات">📊</button>
+    <button id="help-top-btn" title="تعليمات اللعب">❓</button>
+    <button id="settings-top-btn" title="إعدادات">⚙️</button>
+  </div>
+</div>
+  <!-- ...rest of your content... -->
+</body>
+  
 </div>
 <div id="image-container">
     <img id="main-image" src="assets/city_1.webp" alt="city image">
