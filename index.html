@@ -578,9 +578,83 @@ button:hover {
 // --- Map Section ---
 // Improved: expand on hover, marker/confirm logic, confirm button hides correctly
 
+// --- Map Section ---
+// Improved: expand/collapse logic for desktop and mobile, confirm button hides correctly
+
 let map = L.map('map-thumb', { zoomControl: false, attributionControl: false }).setView([23.8859, 45.0792], 5);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
 let userMarker = null;
+
+const mapThumb = document.getElementById("map-thumb");
+const closeMapBtn = document.getElementById("close-map-btn");
+const confirmMapBtn = document.getElementById("confirm-map-btn");
+
+// Device check
+function isMobile() {
+    return window.innerWidth <= 600;
+}
+
+// Expand/collapse logic
+if (isMobile()) {
+    mapThumb.onclick = function() {
+        mapThumb.classList.add("expanded");
+        closeMapBtn.style.display = "block";
+        setTimeout(() => { map.invalidateSize(); }, 300);
+    };
+    closeMapBtn.onclick = function(e) {
+        mapThumb.classList.remove("expanded");
+        closeMapBtn.style.display = "none";
+        confirmMapBtn.style.display = "none";
+        setTimeout(() => { map.invalidateSize(); }, 300);
+        e.stopPropagation();
+    };
+} else {
+    mapThumb.onmouseenter = function() {
+        mapThumb.classList.add("expanded");
+        closeMapBtn.style.display = "block";
+        setTimeout(() => { map.invalidateSize(); }, 300);
+    };
+    mapThumb.onmouseleave = function() {
+        mapThumb.classList.remove("expanded");
+        closeMapBtn.style.display = "none";
+        confirmMapBtn.style.display = "none";
+        setTimeout(() => { map.invalidateSize(); }, 300);
+    };
+    closeMapBtn.onclick = function(e) {
+        mapThumb.classList.remove("expanded");
+        closeMapBtn.style.display = "none";
+        confirmMapBtn.style.display = "none";
+        setTimeout(() => { map.invalidateSize(); }, 300);
+        e.stopPropagation();
+    };
+}
+
+// Place marker and show confirm button
+map.on('click', function(e) {
+    if (userMarker) map.removeLayer(userMarker);
+    userMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+    confirmMapBtn.style.display = "block";
+});
+
+// Confirm guess and hide confirm button
+confirmMapBtn.onclick = function() {
+    if (userMarker) {
+        const latlng = userMarker.getLatLng();
+        guessCityByCoords(latlng.lat, latlng.lng);
+        confirmMapBtn.style.display = "none";
+    }
+};
+
+// Hide confirm button when loading a new city
+function loadCity(idx) {
+    // ...existing code...
+    if (userMarker) {
+        map.removeLayer(userMarker);
+        userMarker = null;
+    }
+    confirmMapBtn.style.display = "none";
+    // ...existing code...
+}
 
 const mapThumb = document.getElementById("map-thumb");
 const closeMapBtn = document.getElementById("close-map-btn");
