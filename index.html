@@ -353,14 +353,13 @@ button,
   <!-- ...rest of your content... -->
 </body>
   
-</div>
 <div id="image-container">
     <img id="main-image" src="assets/city_1.webp" alt="city image">
-      <button id="close-map-btn" style="display:none;position:absolute;top:6px;left:6px;z-index:1003;">✖</button>
     <div id="map-thumb">
-  <button id="close-map-btn" style="display:none;position:absolute;top:10px;left:10px;z-index:1003;">✖</button>
-  <button id="confirm-map-btn" style="display:none;position:absolute;bottom:10px;left:10px;z-index:1004;">تأكيد</button>
-</div>
+        <button id="close-map-btn" style="display:none;position:absolute;top:10px;left:10px;z-index:1003;">✖</button>
+        <button id="confirm-map-btn" style="display:none;position:absolute;bottom:10px;left:10px;z-index:1004;">تأكيد</button>
+    </div>
+
 </div>
 
 <div id="popup">
@@ -895,23 +894,6 @@ document.getElementById("map-thumb").onclick = function(e) {
 };
 const mapThumb = document.getElementById("map-thumb");
 const closeMapBtn = document.getElementById("close-map-btn");
-
-mapThumb.onclick = function(e) {
-    if (!mapThumb.classList.contains("expanded")) {
-        mapThumb.classList.add("expanded");
-        closeMapBtn.style.display = "block";
-    }
-    e.stopPropagation();
-};
-
-closeMapBtn.onclick = function(e) {
-    mapThumb.classList.remove("expanded");
-    closeMapBtn.style.display = "none";
-    e.stopPropagation();
-};
-
-const mapThumb = document.getElementById("map-thumb");
-const closeMapBtn = document.getElementById("close-map-btn");
 const confirmMapBtn = document.getElementById("confirm-map-btn");
 
 mapThumb.onclick = function(e) {
@@ -926,6 +908,23 @@ mapThumb.onclick = function(e) {
     }
     e.stopPropagation();
 };
+
+closeMapBtn.onclick = function(e) {
+    mapThumb.classList.remove("expanded");
+    closeMapBtn.style.display = "none";
+    confirmMapBtn.style.display = "none";
+    e.stopPropagation();
+};
+
+confirmMapBtn.onclick = function(e) {
+    // TODO: Add your confirm logic here
+    mapThumb.classList.remove("expanded");
+    closeMapBtn.style.display = "none";
+    confirmMapBtn.style.display = "none";
+    e.stopPropagation();
+};
+
+
 
 closeMapBtn.onclick = function(e) {
     mapThumb.classList.remove("expanded");
