@@ -89,10 +89,7 @@ function closePopup() {
 }
 window.onload = function() {
     document.getElementById("main-image").src = images[0];
-    if(!localStorage.getItem("seenTutorial")){
-        showPopup();
-        localStorage.setItem("seenTutorial", "true");
-    }
+    showPopup(); // Always show the tutorial popup
 };
 
 // Leaflet map setup
@@ -323,13 +320,8 @@ let correctCoords = selectedCity.coords;
 let attempts = 0;
 
 // Set initial image
-window.onload = function() {
-    document.getElementById("main-image").src = images[0];
-    if(!localStorage.getItem("seenTutorial")){
-        showPopup();
-        localStorage.setItem("seenTutorial", "true");
-    }
-};
+
+
 </script>
 </body>
 </html>
