@@ -656,61 +656,6 @@ function loadCity(idx) {
     // ...existing code...
 }
 
-const mapThumb = document.getElementById("map-thumb");
-const closeMapBtn = document.getElementById("close-map-btn");
-const confirmMapBtn = document.getElementById("confirm-map-btn");
-
-let isMapHovered = false;
-
-// Expand map on hover, collapse on mouse leave
-mapThumb.onmouseenter = function() {
-    isMapHovered = true;
-    mapThumb.classList.add("expanded");
-    closeMapBtn.style.display = "block";
-    setTimeout(() => { map.invalidateSize(); }, 300);
-};
-mapThumb.onmouseleave = function() {
-    isMapHovered = false;
-    mapThumb.classList.remove("expanded");
-    closeMapBtn.style.display = "none";
-    confirmMapBtn.style.display = "none"; // Hide confirm button when collapsing
-    setTimeout(() => { map.invalidateSize(); }, 300);
-};
-closeMapBtn.onclick = function(e) {
-    isMapHovered = false;
-    mapThumb.classList.remove("expanded");
-    closeMapBtn.style.display = "none";
-    confirmMapBtn.style.display = "none"; // Hide confirm button when closing
-    setTimeout(() => { map.invalidateSize(); }, 300);
-    e.stopPropagation();
-};
-
-// Place marker and show confirm button
-map.on('click', function(e) {
-    if (userMarker) map.removeLayer(userMarker);
-    userMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
-    confirmMapBtn.style.display = "block";
-});
-
-// Confirm guess and hide confirm button
-confirmMapBtn.onclick = function() {
-    if (userMarker) {
-        const latlng = userMarker.getLatLng();
-        guessCityByCoords(latlng.lat, latlng.lng);
-        confirmMapBtn.style.display = "none";
-    }
-};
-
-// Hide confirm button when loading a new city
-function loadCity(idx) {
-    // ...existing code...
-    if (userMarker) {
-        map.removeLayer(userMarker);
-        userMarker = null;
-    }
-    confirmMapBtn.style.display = "none";
-    // ...existing code...
-}
 
 
     function showGallery() {
@@ -765,27 +710,28 @@ function loadCity(idx) {
         document.getElementById("vertical-bar").innerHTML = vBarHtml;
     }
     function loadCity(idx) {
-        cityIndex = idx;
-        selectedCity = cityData[cityIndex];
-        images = selectedCity.images;
-        currentImage = 0;
-        correctCity = selectedCity.name;
-        correctCoords = selectedCity.coords;
-        attempts = 0;
-        document.getElementById("main-image").src = images[0];
-        updateCityNumber();
-        document.getElementById("result").innerHTML = "";
-        document.getElementById("quiz").innerHTML = "";
-        document.getElementById("hint-message").innerHTML = "";
-        document.getElementById("image-container").style.display = "block";
-        document.getElementById("gallery").style.display = "none";
-        document.getElementById("map-thumb").style.display = "block";
-        document.getElementById("main-image").style.display = "block";
-        if (userMarker) {
-            map.removeLayer(userMarker);
-            userMarker = null;
-        }
+    cityIndex = idx;
+    selectedCity = cityData[cityIndex];
+    images = selectedCity.images;
+    currentImage = 0;
+    correctCity = selectedCity.name;
+    correctCoords = selectedCity.coords;
+    attempts = 0;
+    document.getElementById("main-image").src = images[0];
+    updateCityNumber();
+    document.getElementById("result").innerHTML = "";
+    document.getElementById("quiz").innerHTML = "";
+    document.getElementById("hint-message").innerHTML = "";
+    document.getElementById("image-container").style.display = "block";
+    document.getElementById("main-image").style.display = "block";
+    document.getElementById("gallery").style.display = "none";
+    document.getElementById("map-thumb").style.display = "block";
+    if (userMarker) {
+        map.removeLayer(userMarker);
+        userMarker = null;
     }
+    confirmMapBtn.style.display = "none";
+}
     document.getElementById("stats-top-btn").onclick = showWinPopup;
     document.getElementById("help-top-btn").onclick = showPopup;
     </script>
