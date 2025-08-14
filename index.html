@@ -4,7 +4,7 @@
 <head><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Saudile v7</title>
+<title>SaudiDle v7</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
 body { font-family: Arial, sans-serif; text-align: center; background: #f4f4f4; margin:0; direction: rtl; }
@@ -15,7 +15,7 @@ body { font-family: Arial, sans-serif; text-align: center; background: #f4f4f4; 
     height: 457px;
     object-fit: cover;
     border-radius: 8px;
-    margin-top: 20px;
+    margin-top: 20px;S
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -219,9 +219,9 @@ button,
 #top-buttons {
     display: flex;
     align-items: center;
-    gap: 0;
+    gap: 8px;
     height: 100%;
-    margin-right: 12px;
+    margin-right: 0;
 }
 
 #top-buttons button {
@@ -258,27 +258,69 @@ button,
         font-size: 1.2em;
         padding: 0 4px;
     }
-    #top-buttons {
-        margin-right: 4px;
-    }
     #top-buttons button {
         font-size: 1em;
         height: 32px;
         width: 32px;
         margin: 0 1px;
     }
+    #top-bar > div[style] {
+        width: 96px !important;
+    }
+}
+@media (max-width: 600px) {
+    #image-container {
+        width: 100%;
+        position: relative;
+    }
+    #main-image  {
+        width: 60vw;
+        max-width: 350px;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-top: 20px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 0 0 10px #90caf9;
+        transition: box-shadow 0.5s, transform 0.5s;
+    }
+    #map-thumb {
+        position: absolute;
+        bottom: 12px;
+        right: 12px;
+        width: 90px;
+        height: 60px;
+        border-radius: 8px;
+        z-index: 20;
+        transition: all 0.3s cubic-bezier(.4,0,.2,1);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    #map-thumb.expanded {
+        width: 98vw;
+        height: 220px;
+        position: fixed;
+        bottom: 50%;
+        right: 50%;
+        transform: translate(50%,50%) scale(1.05);
+        border-radius: 18px;
+        z-index: 1002;
+        box-shadow: 0 0 30px #222;
+    }
 }
 </style>
 </head>
 <body>
-  <div id="top-bar">
-  <div style="width:44px;"></div> <!-- Spacer to balance the buttons -->
-  <div id="site-title">Saudile</div>
+ <div id="top-bar">
+  <div style="width:132px;"></div> <!-- Spacer: same width as buttons group -->
+  <div id="site-title">SaudiDle</div>
   <div id="top-buttons">
     <button id="stats-top-btn" title="إحصائيات">📊</button>
     <button id="help-top-btn" title="تعليمات اللعب">❓</button>
     <button id="settings-top-btn" title="إعدادات">⚙️</button>
   </div>
+
 </div>
   <!-- ...rest of your content... -->
 </body>
@@ -286,11 +328,12 @@ button,
 </div>
 <div id="image-container">
     <img id="main-image" src="assets/city_1.webp" alt="city image">
+      <button id="close-map-btn" style="display:none;position:absolute;top:6px;left:6px;z-index:1003;">✖</button>
     <div id="map-thumb"></div>
 </div>
 
 <div id="popup">
-    <h2>مرحبًا بك في Saudile</h2>
+    <h2>مرحبًا بك في SaudiDle</h2>
     <p>حاول تخمن المدينة السعودية من خلال الصور واختارها بالخريطة . لديك 5 محاولات ومع كل محاولة هناك صورة جديدة.</p>
     <h3>معاني الإيموجي:</h3>
     <ul>
@@ -566,7 +609,7 @@ function showQuiz(){
 
 
 function showWinPopup() {
-    // Streak logic (localStorage)
+    // Streak logic (localStorage)S
     let streak = Number(localStorage.getItem("currentStreak") || 0) + 1;
     let maxStreak = Math.max(streak, Number(localStorage.getItem("maxStreak") || 0));
     localStorage.setItem("currentStreak", streak);
@@ -583,7 +626,7 @@ function showWinPopup() {
 
     // Share button
     document.getElementById("share-btn").onclick = function() {
-        let shareText = `Saudile\nاليوم: ${correctCity}\nعدد المحاولات: ${attempts}\nسلسلتك الحالية: ${streak}\nأعلى سلسلة: ${maxStreak}\nجرب بنفسك: https://yourwebsite.com`;
+        let shareText = `SaudiDle\nاليوم: ${correctCity}\nعدد المحاولات: ${attempts}\nسلسلتك الحالية: ${streak}\nأعلى سلسلة: ${maxStreak}\nجرب بنفسك: https://yourwebsite.com`;
         navigator.clipboard.writeText(shareText);
         this.textContent = "تم النسخ!";
         setTimeout(() => { this.textContent = "مشاركة النتيجة"; }, 1500);
@@ -809,6 +852,32 @@ function closeWinPopup() {
     document.getElementById("win-popup").style.display = "none";
     showGallery();
 }
+document.getElementById("map-thumb").onclick = function(e) {
+    // Only expand if not already expanded
+    if (!this.classList.contains("expanded")) {
+        this.classList.add("expanded");
+    } else {
+        this.classList.remove("expanded");
+    }
+    // Prevent map click from triggering quiz/map logic
+    e.stopPropagation();
+};
+const mapThumb = document.getElementById("map-thumb");
+const closeMapBtn = document.getElementById("close-map-btn");
+
+mapThumb.onclick = function(e) {
+    if (!mapThumb.classList.contains("expanded")) {
+        mapThumb.classList.add("expanded");
+        closeMapBtn.style.display = "block";
+    }
+    e.stopPropagation();
+};
+
+closeMapBtn.onclick = function(e) {
+    mapThumb.classList.remove("expanded");
+    closeMapBtn.style.display = "none";
+    e.stopPropagation();
+};
 </script>
 </body>
 </html>
