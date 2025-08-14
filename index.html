@@ -30,6 +30,7 @@ body { font-family: Arial, sans-serif; text-align: center; background: #f4f4f4; 
 
 <div id="image-container">
     <img id="main-image" src="assets/city_1.webp" alt="city image">
+   <img id="winner-image" src="" alt="city winner image" style="display:none; width:70%; max-width:700px; border-radius:8px; margin-top:20px; display:block; margin-left:auto; margin-right:auto;">
     <div id="map-thumb"></div>
 </div>
 
@@ -60,6 +61,7 @@ function closePopup() {
     document.getElementById("popup").style.display = "none";
 }
 window.onload = function() {
+    document.getElementById("main-image").src = images[0];
     if(!localStorage.getItem("seenTutorial")){
         showPopup();
         localStorage.setItem("seenTutorial", "true");
@@ -71,7 +73,6 @@ let map = L.map('map-thumb', { zoomControl: false, attributionControl: false }).
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
 
 map.on('click', function(e) {
-    // Show custom confirmation message
     document.getElementById("confirm-message").innerHTML =
         `<div class="result-card">
             هل أنت متأكد من اختيار هذا الموقع؟
@@ -79,21 +80,17 @@ map.on('click', function(e) {
             <button id="confirm-btn">تأكيد</button>
             <button id="cancel-btn">إلغاء</button>
         </div>`;
-    // Confirm button
     document.getElementById("confirm-btn").onclick = function() {
         guessCityByCoords(e.latlng.lat, e.latlng.lng);
         document.getElementById("confirm-message").innerHTML = "";
     };
-    // Cancel button
     document.getElementById("cancel-btn").onclick = function() {
         document.getElementById("confirm-message").innerHTML = "";
     };
 });
 
-
 function guessCityByCoords(lat, lng) {
     attempts++;
-    // Change image after each attempt
     if (currentImage < images.length - 1) {
         currentImage++;
         document.getElementById("main-image").src = images[currentImage];
@@ -106,12 +103,13 @@ function guessCityByCoords(lat, lng) {
         showResult(false, dist, arrow);
     } else {
         showHint(dist, arrow);
+        showBigEmoji("❌"); // Show big X for every wrong guess
     }
 }
 
 function calcDistance(lat1, lon1, lat2, lon2) {
     function toRad(v) { return v * Math.PI / 180; }
-    let R = 6371; // km
+    let R = 6371;
     let dLat = toRad(lat2 - lat1);
     let dLon = toRad(lon2 - lon1);
     let a = Math.sin(dLat/2) * Math.sin(dLat/2) +
@@ -149,10 +147,22 @@ function showHint(dist, arrow) {
 
 function showResult(win, dist, arrow) {
     if(win){
-        document.getElementById("result").innerHTML = '<div class="result-card">أحسنت! 🎉<br>'+correctCity+'</div>';
+        showBigEmoji("✅"); // Show big correct emoji
+        document.getElementById("result").innerHTML = `
+            <div class="result-card" style="background:#c8e6c9; color:#256029; font-size:1.5em; border:2px solid #388e3c;">
+                ✅ أحسنت! الإجابة صحيحة 🎉<br>${correctCity}
+            </div>`;
+        document.getElementById("map-thumb").style.display = "none";
+        document.getElementById("main-image").style.display = "none";
+        document.getElementById("winner-image").src = selectedCity.winnerImage;
+        document.getElementById("winner-image").style.display = "block";
         showQuiz();
     } else {
-        document.getElementById("result").innerHTML = '<div class="result-card">انتهت المحاولات ❌<br>المدينة الصحيحة: '+correctCity+'</div>';
+        showBigEmoji("❌"); // Show big wrong emoji
+        document.getElementById("result").innerHTML = `
+            <div class="result-card" style="background:#ffcdd2; color:#b71c1c; font-size:1.5em; border:2px solid #b71c1c;">
+                ❌ انتهت المحاولات أو الإجابة خاطئة<br>المدينة الصحيحة: ${correctCity}
+            </div>`;
         showQuiz();
     }
 }
@@ -170,24 +180,44 @@ function showQuiz(){
     html += `</div>`;
     quizDiv.innerHTML = html;
 
-    // Add event listeners
     document.querySelectorAll('.quiz-btn').forEach(btn => {
         btn.onclick = function() {
             let qIdx = parseInt(this.getAttribute('data-q'));
             let selected = this.getAttribute('data-opt');
             let correct = quizArr[qIdx].correct;
             if(selected === correct){
-                this.style.background = "#c8e6c9"; // green
+                this.style.background = "#c8e6c9";
                 this.innerText += " ✅";
+                showBigEmoji("✅");
             } else {
-                this.style.background = "#ffcdd2"; // red
+                this.style.background = "#ffcdd2";
                 this.innerText += " ❌";
+                showBigEmoji("❌");
             }
-            // Disable all buttons for this question
             document.querySelectorAll(`.quiz-btn[data-q="${qIdx}"]`).forEach(b => b.disabled = true);
         };
     });
 }
+
+function showBigEmoji(emoji) {
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.display = 'flex';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+    overlay.style.zIndex = '99999';
+    overlay.style.background = 'rgba(255,255,255,0.3)';
+    overlay.innerHTML = `<span style="font-size:8em;">${emoji}</span>`;
+    document.body.appendChild(overlay);
+    setTimeout(() => {
+        document.body.removeChild(overlay);
+    }, 1000);
+}
+
 const cityData = [
     {
         name: "أبها",
@@ -199,6 +229,7 @@ const cityData = [
             "assets/abha_4.webp",
             "assets/abha_5.webp"
         ],
+        winnerImage: "assets/abha_win.png",
         quiz: [
             {
                 question: "كم يبلغ ارتفاع أبها عن سطح البحر؟",
@@ -227,6 +258,7 @@ const cityData = [
             "assets/riyadh_4.webp",
             "assets/riyadh_5.webp"
         ],
+        winnerImage: "assets/riyadh_win.webp",
         quiz: [
             {
                 question: "كم عدد سكان الرياض؟",
@@ -245,16 +277,16 @@ const cityData = [
             }
         ]
     }
-    // ... add more cities
 ];
+
 const dateCityMap = {
-    "2025-08-14": 0, // أبها
-    "2025-08-15": 1, // الرياض
-    // Add more dates and city indexes as needed
+    "2025-08-14": 0,
+    "2025-08-15": 1
 };
+
 const today = new Date();
-const todayStr = today.toISOString().slice(0, 10); // "YYYY-MM-DD"
-const cityIndex = dateCityMap[todayStr] !== undefined ? dateCityMap[todayStr] : 0; // Default to أبها if not found
+const todayStr = today.toISOString().slice(0, 10);
+const cityIndex = dateCityMap[todayStr] !== undefined ? dateCityMap[todayStr] : 0;
 const selectedCity = cityData[cityIndex];
 
 let images = selectedCity.images;
