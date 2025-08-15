@@ -11,14 +11,14 @@
         body { font-family: 'Montserrat', Arial, sans-serif; text-align: center; background: #111; margin:0; direction: rtl; color: #D9D9D9;}
         .dark-mode { background: #111; color: #D9D9D9; }
         .light-mode { background: #fff; color: #232323; }
-        #top-bar {
+          #top-bar {
             width: 100%;
             background: #232323;
             color: #fff;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0;
+            padding: 0 16px; /* Add padding for spacing */
             height: 56px;
             box-sizing: border-box;
             position: sticky;
@@ -342,7 +342,7 @@
             name: "أبها",
             coords: [18.21639, 42.50528],
             province: "عسير",
-            radius: 12,
+            radius: 20,
             images: [
                 "assets/abha_1.webp",
                 "assets/abha_2.webp",
@@ -709,12 +709,9 @@
     }
 
     // --- Win Popup and Stats Button Logic ---
-    document.getElementById("stats-top-btn").onclick = function() {
-        const cityFinished = document.getElementById("main-image").style.display === "none" ||
-                             document.getElementById("map-thumb").style.display === "none";
-        if (cityFinished) {
-            showWinPopup();
-        }
+      document.getElementById("stats-top-btn").onclick = function() {
+        // Always show the win popup, which contains the stats.
+        showWinPopup();
     };
     function showWinPopup() {
         let streak = Number(localStorage.getItem("currentStreak") || 0);
