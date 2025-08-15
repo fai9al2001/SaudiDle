@@ -25,6 +25,7 @@
             top: 0;
             z-index: 1001;
             border-bottom: 2px solid #232323;
+           
         }
         #site-title {
             flex: 1;
@@ -36,28 +37,28 @@
         }
         .green-le { color: #1B9E49; }
         #top-buttons {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            height: 100%;
-            margin-right: 0;
-        }
-        #top-buttons button {
-            background: #111;
-            color: #fff;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 1.5em;
-            cursor: pointer;
-            margin: 0 4px;
-            transition: background 0.2s, color 0.2s, transform 0.2s;
-            outline: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
+    display: flex;
+    align-items: center;
+    gap: 4px; /* Reduced from 8px */
+    height: 100%;
+    margin-right: 0;
+}
+#top-buttons button {
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5em;
+    cursor: pointer;
+    margin: 0 2px; /* Reduced from 4px */
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    outline: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
         #top-buttons button:active,
         #top-buttons button:focus,
         #top-buttons button:hover {
@@ -179,6 +180,20 @@
             }
             #popup, #win-popup, #settings-popup, #city-list-popup { max-width: 98vw; min-width: 320px; width: 90vw; padding: 16px;}
         }
+        @media (max-width: 600px) {
+    #top-bar {
+        padding: 0 8px !important;
+    }
+    #top-buttons {
+        gap: 2px !important;
+    }
+    #top-buttons button {
+        margin: 0 1px !important;
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 1.3em !important;
+    }
+}
         #site-title {
             flex: 1;
             text-align: center;
@@ -258,17 +273,18 @@
     </style>
 </head>
 <body>
-    <div id="top-bar">
-        <div style="width:132px;"></div>
-        <div id="site-title">
-            SAUDI<span class="green-le">LE</span>
-        </div>
-        <div id="top-buttons">
-            <button id="stats-top-btn" title="إحصائيات">📊</button>
-            <button id="help-top-btn" title="تعليمات اللعب">❓</button>
-            <button id="settings-top-btn" title="إعدادات">⚙️</button>
-        </div>
+   
+   <div id="top-bar">
+    <div id="top-buttons">
+        <button id="stats-top-btn" title="إحصائيات">📊</button>
+        <button id="help-top-btn" title="تعليمات اللعب">❓</button>
+        <button id="settings-top-btn" title="إعدادات">⚙️</button>
     </div>
+    <div id="site-title">
+        SAUDI<span class="green-le">LE</span>
+    </div>
+    <div style="width:140px;"></div> <!-- Spacer -->
+</div>
     <div id="city-nav-bar" style="display: flex; justify-content: center; align-items: center; margin: 24px auto 0 auto; max-width: 880px;">
         <button id="prev-city-btn">حاول تخمن المدن السابقة!</button>
     </div>
