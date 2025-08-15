@@ -289,8 +289,8 @@ button:hover {
         }
     ];
     const dateCityMap = {
-        "2025-08-14": 0,
-        "2025-08-15": 1
+        "2025-08-15": 0,
+        "2025-08-16": 1
     };
     const todayStr = new Date().toISOString().slice(0, 10);
     let cityIndex = dateCityMap[todayStr] !== undefined ? dateCityMap[todayStr] : 0;
@@ -637,14 +637,14 @@ map.on('click', function(e) {
 });
 
 // Confirm guess and hide confirm button
-confirmMapBtn.onclick = function() {
+confirmMapBtn.onclick = function(event) {
+    event.stopPropagation(); // Prevents map click from firing
     if (userMarker) {
         const latlng = userMarker.getLatLng();
         guessCityByCoords(latlng.lat, latlng.lng);
         confirmMapBtn.style.display = "none";
     }
 };
-
 // Hide confirm button when loading a new city
 function loadCity(idx) {
     // ...existing code...
