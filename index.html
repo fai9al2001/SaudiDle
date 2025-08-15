@@ -67,15 +67,53 @@
             justify-content: center;
         }
         /* Hide the mobile settings button by default */
-        #settings-top-btn-mobile {
+         #settings-top-btn-mobile {
             display: none !important;
         }
-        #top-buttons button:active,
-        #top-buttons button:focus,
-        #top-buttons button:hover {
+
+        /* --- START: Animation & Effects --- */
+
+        /* 1. Add hover and active (click) effects for top bar buttons */
+        .top-bar-section button:hover {
             background: #232323;
             color: #1B9E49;
             transform: scale(1.08);
+        }
+        .top-bar-section button:active {
+            transform: scale(0.95);
+            transition: transform 0.1s ease;
+        }
+
+        /* 2. Add a more pronounced active (click) effect for main buttons */
+        .main-action-btn:active,
+        #prev-city-btn:active {
+            transform: scale(0.98) !important;
+        }
+
+        /* 3. Add fade-in animation to popups */
+        #popup, #win-popup, #settings-popup, #city-list-popup {
+            animation: fadeInScale 0.3s ease-out;
+        }
+
+        /* 4. Add fade-in animation to result/hint cards */
+        .result-card {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* 5. Add fade-in animation to the image gallery */
+        #gallery {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Keyframe definitions for the animations */
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         #city-nav-bar {
             margin: 24px auto 0 auto; max-width: 880px; display: flex; align-items: center; justify-content: center;
@@ -116,7 +154,7 @@
             margin-left: auto;
             margin-right: auto;
             box-shadow: 0 0 10px #232323;
-            transition: box-shadow 0.5s, transform 0.5s;
+            transition: box-shadow 0.5s, transform 0.5s, opacity 0.3s
         }
         #map-thumb {
             position: absolute;
@@ -645,12 +683,19 @@
         loadCity(idx);
         closeCityListPopup();
     };
-
+ function changeMainImageWithAnimation(newSrc) {
+        const mainImage = document.getElementById("main-image");
+        mainImage.style.opacity = 0; // Start fade-out
+        setTimeout(() => {
+            mainImage.src = newSrc; // Change source when invisible
+            mainImage.style.opacity = 1; // Start fade-in
+        }, 300); // This duration must match the CSS transition time
+    }
     // --- Game Logic ---
-    function guessCityByCoords(lat, lng) {
+     function guessCityByCoords(lat, lng) {
         attempts++;
         let dist = calcDistance(lat, lng, correctCoords[0], correctCoords[1]);
-        guessHistory.push(getEmojiByDistance(dist) === '✅' ? '🟩' : getEmojiByDistance(dist)); // Add this line
+        guessHistory.push(getEmojiByDistance(dist) === '✅' ? '🟩' : getEmojiByDistance(dist));
         let arrow = getDirectionArrow(lat, lng, correctCoords[0], correctCoords[1]);
         showLoadingBar(() => {
             if (dist < selectedCity.radius) {
@@ -661,7 +706,8 @@
                 showHint(dist, arrow);
                 if (currentImage < images.length - 1) {
                     currentImage++;
-                    document.getElementById("main-image").src = images[currentImage];
+                    // This is the corrected line that calls the animation function
+                    changeMainImageWithAnimation(images[currentImage]);
                 }
             }
         });
@@ -877,16 +923,17 @@
         document.getElementById("vertical-bar").innerHTML = vBarHtml;
     }
     function loadCity(idx) {
-        cityIndex = idx;
-        selectedCity = cityData[cityIndex];
-        images = selectedCity.images;
-        currentImage = 0;
-        correctCity = selectedCity.name;
-        correctCoords = selectedCity.coords;
-        attempts = 0;
-        document.getElementById("main-image").src = images[0];
-        document.getElementById("result").innerHTML = "";
-        document.getElementById("quiz").innerHTML = "";
+    cityIndex = idx;
+    selectedCity = cityData[cityIndex];
+    images = selectedCity.images;
+    currentImage = 0;
+    correctCity = selectedCity.name;
+    correctCoords = selectedCity.coords;
+    attempts = 0;
+    guessHistory = []; // Reset guess history for the new city
+    changeMainImageWithAnimation(images[0]); // Use the animation function
+    document.getElementById("result").innerHTML = "";
+    document.getElementById("quiz").innerHTML = "";
         document.getElementById("hint-message").innerHTML = "";
         document.getElementById("image-container").style.display = "block";
         document.getElementById("main-image").style.display = "block";
