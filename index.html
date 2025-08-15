@@ -36,29 +36,38 @@
             letter-spacing: 2px;
         }
         .green-le { color: #1B9E49; }
-        #top-buttons {
-    display: flex;
-    align-items: center;
-    gap: 4px; /* Reduced from 8px */
-    height: 100%;
-    margin-right: 0;
-}
-#top-buttons button {
-    background: #111;
-    color: #fff;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 1.5em;
-    cursor: pointer;
-    margin: 0 2px; /* Reduced from 4px */
-    transition: background 0.2s, color 0.2s, transform 0.2s;
-    outline: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
+        .top-bar-section {
+            display: flex;
+            align-items: center;
+            flex: 1; /* This makes the side sections take up equal space, centering the title */
+        }
+        #top-bar-left {
+            justify-content: flex-end; /* Aligns items to the LEFT in RTL */
+        }
+        #top-bar-right {
+            justify-content: flex-start; /* Aligns items to the RIGHT in RTL */
+            gap: 4px;
+        }
+        .top-bar-section button {
+            background: #111;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5em;
+            cursor: pointer;
+            margin: 0 2px;
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+            outline: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* Hide the mobile settings button by default */
+        #settings-top-btn-mobile {
+            display: none !important;
+        }
         #top-buttons button:active,
         #top-buttons button:focus,
         #top-buttons button:hover {
@@ -179,11 +188,21 @@
                 transition: width 0.3s, height 0.3s;
             }
             #popup, #win-popup, #settings-popup, #city-list-popup { max-width: 98vw; min-width: 320px; width: 90vw; padding: 16px;}
+            
         }
         @media (max-width: 600px) {
     #top-bar {
         padding: 0 8px !important;
     }
+     #settings-top-btn-mobile {
+                display: inline-flex !important; /* Show mobile settings button */
+            }
+            #settings-top-btn-desktop {
+                display: none !important; /* Hide desktop settings button */
+            }
+            #top-bar-right {
+                gap: 2px;
+            }
     #top-buttons {
         gap: 2px !important;
     }
@@ -273,17 +292,22 @@
     </style>
 </head>
 <body>
-   
    <div id="top-bar">
-    <div id="top-buttons">
+    <!-- This container will appear on the RIGHT because of RTL -->
+    <div class="top-bar-section" id="top-bar-right">
         <button id="stats-top-btn" title="إحصائيات">📊</button>
         <button id="help-top-btn" title="تعليمات اللعب">❓</button>
-        <button id="settings-top-btn" title="إعدادات">⚙️</button>
+        <button id="settings-top-btn-desktop" class="js-settings-btn" title="إعدادات">⚙️</button>
     </div>
+
     <div id="site-title">
         SAUDI<span class="green-le">LE</span>
     </div>
-    <div style="width:140px;"></div> <!-- Spacer -->
+
+    <!-- This container will appear on the LEFT because of RTL -->
+    <div class="top-bar-section" id="top-bar-left">
+        <button id="settings-top-btn-mobile" class="js-settings-btn" title="إعدادات">⚙️</button>
+    </div>
 </div>
     <div id="city-nav-bar" style="display: flex; justify-content: center; align-items: center; margin: 24px auto 0 auto; max-width: 880px;">
         <button id="prev-city-btn">حاول تخمن المدن السابقة!</button>
@@ -416,8 +440,8 @@
         }
     ];
    const dateCityMap = {
-        "2025-08-16": 1,
-        "2025-08-17": 0
+        "2025-08-16": 0,
+        "2025-08-17": 1
     };
 
     // --- Calculate Date based on Saudi Time (UTC+3) ---
@@ -518,9 +542,11 @@
     document.getElementById("help-top-btn").onclick = showPopup;
 
     // --- Settings ---
-    document.getElementById("settings-top-btn").onclick = function() {
-        document.getElementById("settings-popup").style.display = "block";
-    };
+     document.querySelectorAll(".js-settings-btn").forEach(button => {
+        button.onclick = function() {
+            document.getElementById("settings-popup").style.display = "block";
+        };
+    });
     function closeSettingsPopup() {
         document.getElementById("settings-popup").style.display = "none";
     }
