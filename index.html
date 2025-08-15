@@ -3,15 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SaudiDle v7</title>
+    <title>SaudiLe v7</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; background: #111; margin:0; direction: rtl; color: #D9D9D9;}
+        body { font-family: 'Montserrat', Arial, sans-serif; text-align: center; background: #111; margin:0; direction: rtl; color: #D9D9D9;}
+        .dark-mode { background: #111; color: #D9D9D9; }
+        .light-mode { background: #fff; color: #232323; }
         #top-bar {
             width: 100%;
             background: #232323;
-            color: #D9D9D9;
+            color: #fff;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -21,16 +24,17 @@
             position: sticky;
             top: 0;
             z-index: 1001;
-            border-bottom: 2px solid #444;
+            border-bottom: 2px solid #232323;
         }
         #site-title {
             flex: 1;
             text-align: center;
             font-size: 2em;
             font-weight: bold;
-            color: #1B9E49;
+            color: #fff;
             letter-spacing: 2px;
         }
+        .green-le { color: #1B9E49; }
         #top-buttons {
             display: flex;
             align-items: center;
@@ -38,41 +42,55 @@
             height: 100%;
             margin-right: 0;
         }
-        #top-buttons button,
-button {
-    background: #1B9E49;
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    font-size: 1.1em;
-    border-radius: 24px;
-    cursor: pointer;
-    margin: 0 4px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    transition: background 0.2s, color 0.2s, transform 0.2s;
-    outline: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-#top-buttons button:active,
-#top-buttons button:focus,
-#top-buttons button:hover,
-button:active,
-button:focus,
-button:hover {
-    background: #157a36;
-    color: #fff;
-    transform: scale(1.05);
-}
+        #top-buttons button {
+            background: #111;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5em;
+            cursor: pointer;
+            margin: 0 4px;
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+            outline: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #top-buttons button:active,
+        #top-buttons button:focus,
+        #top-buttons button:hover {
+            background: #232323;
+            color: #1B9E49;
+            transform: scale(1.08);
+        }
         #city-nav-bar {
-            margin: 24px auto 0 auto; max-width: 880px; display: flex; align-items: center; justify-content: space-between;
+            margin: 24px auto 0 auto; max-width: 880px; display: flex; align-items: center; justify-content: center;
         }
-        #prev-city-btn {
-            font-size:1.1em; padding:8px 18px; border-radius:18px; background:#1B9E49; color:#fff; border:none; cursor:pointer;
+        #prev-city-btn, .main-action-btn {
+            background: #1B9E49;
+            color: #fff;
+            border: none;
+            border-radius: 18px;
+            font-size: 1.1em;
+            padding: 8px 18px;
+            cursor: pointer;
+            margin: 12px 0;
+            box-shadow: none;
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+            outline: none;
+            display: inline-block;
         }
-        #city-number {
-            font-size:1.2em; color:#1B9E49; font-weight:bold;
+        .main-action-btn:active,
+        .main-action-btn:focus,
+        .main-action-btn:hover,
+        #prev-city-btn:active,
+        #prev-city-btn:focus,
+        #prev-city-btn:hover {
+            background: #157a36;
+            color: #fff;
+            transform: scale(1.05);
         }
         #image-container { position: relative; display: inline-block; margin-top: 20px; }
         #main-image {
@@ -85,26 +103,37 @@ button:hover {
             display: block;
             margin-left: auto;
             margin-right: auto;
-            box-shadow: 0 0 10px #90caf9;
+            box-shadow: 0 0 10px #232323;
             transition: box-shadow 0.5s, transform 0.5s;
         }
-        #map-thumb { position: absolute; bottom: 10px; right: 10px; width: 166px; height: 100px;
-            border: 2px solid #ccc; border-radius: 8px; overflow: hidden; cursor: pointer; z-index: 10; transition: transform 0.3s ease; }
-  #map-thumb.expanded {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    width: 350px;
-    height: 220px;
-    max-width: 98vw;
-    border-radius: 18px;
-    z-index: 1002;
-    box-shadow: 0 0 30px #222;
-    transition: width 0.3s, height 0.3s;
-}
+        #map-thumb {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 166px;
+            height: 100px;
+            border: 2px solid #232323;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            z-index: 10;
+            transition: width 0.3s, height 0.3s;
+        }
+        #map-thumb.expanded {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 350px;
+            height: 220px;
+            max-width: 98vw;
+            border-radius: 18px;
+            z-index: 1002;
+            box-shadow: 0 0 30px #232323;
+            transition: width 0.3s, height 0.3s;
+        }
         #close-map-btn {
             font-size: 1.3em;
-            background: #222;
+            background:  #232323;
             color: #fff;
             border: none;
             border-radius: 50%;
@@ -121,54 +150,137 @@ button:hover {
         }
         #popup, #win-popup, #settings-popup, #city-list-popup {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: #1F2023; color: #D9D9D9; border-radius: 32px; box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            background:  #232323; color: #fff; border-radius: 32px; box-shadow: 0 0 20px rgba(0,0,0,0.3);
             z-index: 9999; max-width: 400px; width: 90%; text-align: center; padding: 24px; display: none;
         }
         .result-card, .quiz {
-            background: #1F2023; color: #D9D9D9; border-radius: 32px; border: none;
+            background:  #232323; color: #fff; border-radius: 32px; border: none;
             box-shadow: 0 0 10px rgba(0,0,0,0.2); display: inline-block; text-align: center; padding: 15px; margin-top: 20px;
         }
         .quiz h3 { margin-top: 0; }
         .quiz button { margin: 5px; padding: 8px 12px; border-radius: 32px; }
         #loading-bar-container { width:70%;max-width:700px;margin:20px auto 0 auto;display:none; }
-        #loading-bar { height:18px;background:linear-gradient(90deg,#1B9E49,#222);border-radius:8px;width:0%;transition:width 1s;}
+        #loading-bar { height:18px;background:linear-gradient(90deg,#1B9E49, #232323);border-radius:8px;width:0%;transition:width 1s;}
         #gallery { display:none; margin: 30px auto; max-width: 900px;}
         @media (max-width: 600px) {
             #main-image  { width: 85vw; max-width: 420px; height: 210px; }
             #map-thumb { width: 130px; height: 90px; border-radius: 8px; bottom: 12px; right: 12px;}
-            #map-thumb.expanded { width: 70vw; height: 180px; }
+            #map-thumb.expanded {
+                position: fixed;
+                bottom: 12px;
+                right: 12px;
+                width: 98vw;
+                height: 220px;
+                max-width: 98vw;
+                border-radius: 18px;
+                z-index: 1002;
+                box-shadow: 0 0 30px #232323;
+                transition: width 0.3s, height 0.3s;
+            }
             #popup, #win-popup, #settings-popup, #city-list-popup { max-width: 98vw; min-width: 320px; width: 90vw; padding: 16px;}
         }
-        @media (max-width: 600px) {
-    #map-thumb:hover {
-        /* Don't expand on hover for mobile */
-    }
-}
+        #site-title {
+            flex: 1;
+            text-align: center;
+            font-size: 2em;
+            font-family: 'Montserrat', Arial, sans-serif;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+        .slider-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 28px;
+            margin: 12px 0;
+        }
+        .slider-switch input { display: none; }
+        .slider-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #ccc;
+            border-radius: 28px;
+            transition: .4s;
+        }
+        .slider-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 3px;
+            bottom: 3px;
+            background: #fff;
+            border-radius: 50%;
+            transition: .4s;
+        }
+        .slider-switch input:checked + .slider-slider {
+            background: #1B9E49;
+        }
+        .slider-switch input:checked + .slider-slider:before {
+            transform: translateX(22px);
+            background: #232323;
+        }
+        #popup button,
+        #win-popup button,
+        #settings-popup button,
+        #city-list-popup button {
+            background: #1B9E49;
+            color: #fff;
+            border: none;
+            border-radius: 18px;
+            font-size: 1.1em;
+            padding: 8px 18px;
+            cursor: pointer;
+            margin: 12px 0;
+            box-shadow: none;
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+            outline: none;
+            display: inline-block;
+        }
+        #popup button:active,
+        #popup button:focus,
+        #popup button:hover,
+        #win-popup button:active,
+        #win-popup button:focus,
+        #win-popup button:hover,
+        #settings-popup button:active,
+        #settings-popup button:focus,
+        #settings-popup button:hover,
+        #city-list-popup button:active,
+        #city-list-popup button:focus,
+        #city-list-popup button:hover {
+            background: #157a36;
+            color: #fff;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
     <div id="top-bar">
         <div style="width:132px;"></div>
-        <div id="site-title">SaudiDle</div>
+        <div id="site-title">
+            SAUDI<span class="green-le">LE</span>
+        </div>
         <div id="top-buttons">
             <button id="stats-top-btn" title="إحصائيات">📊</button>
             <button id="help-top-btn" title="تعليمات اللعب">❓</button>
             <button id="settings-top-btn" title="إعدادات">⚙️</button>
         </div>
     </div>
-    <div id="city-nav-bar">
+    <div id="city-nav-bar" style="display: flex; justify-content: center; align-items: center; margin: 24px auto 0 auto; max-width: 880px;">
         <button id="prev-city-btn">حاول تخمن المدن السابقة!</button>
-        <span id="city-number">المدينة رقم <span id="city-num-value">1</span></span>
     </div>
     <div id="image-container">
         <img id="main-image" src="" alt="city image">
         <div id="map-thumb">
-    <button id="close-map-btn" style="display:none;">✖</button>
-    <button id="confirm-map-btn" style="display:none;position:absolute;bottom:10px;left:10px;z-index:1004;">تأكيد</button>
-</div>
+            <button id="close-map-btn" style="display:none;">✖</button>
+            <button id="confirm-map-btn" class="main-action-btn" style="display:none;position:absolute;bottom:10px;left:10px;z-index:1004;">تأكيد</button>
+        </div>
     </div>
     <div id="popup">
-        <h2>مرحبًا بك في SaudiDle</h2>
+        <h2>مرحبًا بك في SaudiLe</h2>
         <p>حاول تخمن المدينة السعودية من خلال الصور وحدد موقعها عن طريق الخريطة . لديك 5 محاولات ومع كل محاولة هناك صورة جديدة بتوضح لك اكثر.</p>
         <h3>معاني الإيموجي:</h3>
         <ul>
@@ -181,16 +293,18 @@ button:hover {
     <div id="confirm-message" style="margin-top:10px;"></div>
     <div id="settings-popup">
         <h2>الإعدادات</h2>
-        <label style="font-size:1.2em;">
-            <input type="checkbox" id="dark-mode-toggle" checked style="transform:scale(1.3);margin-left:8px;">
-            تفعيل الوضع الليلي (Dark Mode)
+        <label style="font-size:1.2em;display:flex;align-items:center;justify-content:center;">
+            الوضع الليلي
+            <span style="margin-right:10px;"></span>
+            <span class="slider-switch">
+                <input type="checkbox" id="dark-mode-toggle">
+                <span class="slider-slider"></span>
+            </span>
         </label>
-        <br>
         <button onclick="closeSettingsPopup()" style="margin-top:15px;">إغلاق</button>
     </div>
     <div id="result"></div>
-    <div id="quiz"></div>
-    <button id="hint-btn" style="margin-top:25px;">تلميح</button>
+    <button id="hint-btn" class="main-action-btn">تلميح</button>
     <div id="hint-message" style="margin-top:15px;"></div>
     <div id="win-popup">
         <div id="win-tabs">
@@ -220,7 +334,8 @@ button:hover {
         <div id="city-list-grid" style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-top:18px;"></div>
         <button onclick="closeCityListPopup()" style="margin-top:18px;">إغلاق</button>
     </div>
-    <script>
+  
+<script>
     // --- Data ---
     const cityData = [
         {
@@ -288,11 +403,24 @@ button:hover {
             ]
         }
     ];
-    const dateCityMap = {
-        "2025-08-15": 0,
-        "2025-08-16": 1
+   const dateCityMap = {
+        "2025-08-16": 0,
+        "2025-08-17": 1
     };
-    const todayStr = new Date().toISOString().slice(0, 10);
+
+    // --- Calculate Date based on Saudi Time (UTC+3) ---
+    const now = new Date();
+    // Get the current time in UTC milliseconds by adding the local timezone offset
+    const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
+    // Create a new date object for Saudi time by adding 3 hours
+    const ksaTime = new Date(utcTime + (3 * 3600 * 1000));
+    // Format the date as YYYY-MM-DD
+    const year = ksaTime.getFullYear();
+    const month = String(ksaTime.getMonth() + 1).padStart(2, '0');
+    const day = String(ksaTime.getDate()).padStart(2, '0');
+    const todayStr = `${year}-${month}-${day}`;
+    // --- End Date Calculation ---
+
     let cityIndex = dateCityMap[todayStr] !== undefined ? dateCityMap[todayStr] : 0;
     let selectedCity = cityData[cityIndex];
     let images = selectedCity.images;
@@ -304,48 +432,100 @@ button:hover {
     // --- UI Setup ---
     window.onload = function() {
         document.getElementById("main-image").src = images[0];
-        updateCityNumber();
         showPopup();
+        document.body.classList.add("dark-mode");
+        document.getElementById("dark-mode-toggle").checked = true;
     };
 
-    function updateCityNumber() {
-        document.getElementById("city-num-value").textContent = cityIndex + 1;
-    }
+    // --- Map Section ---
+    let map = L.map('map-thumb', { zoomControl: false, attributionControl: false }).setView([23.8859, 45.0792], 5);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
+    let userMarker = null;
+    const mapThumb = document.getElementById("map-thumb");
+    const closeMapBtn = document.getElementById("close-map-btn");
+    const confirmMapBtn = document.getElementById("confirm-map-btn");
 
-    // --- Map ---
-   
+    function isMobile() {
+        return window.innerWidth <= 600;
+    }
+    if (isMobile()) {
+        mapThumb.onclick = function() {
+            mapThumb.classList.add("expanded");
+            closeMapBtn.style.display = "block";
+            setTimeout(() => { map.invalidateSize(); }, 300);
+        };
+        closeMapBtn.onclick = function(e) {
+            mapThumb.classList.remove("expanded");
+            closeMapBtn.style.display = "none";
+            // The line that hid the confirm button is removed from here.
+            setTimeout(() => { map.invalidateSize(); }, 300);
+            e.stopPropagation();
+        };
+    } else {
+        mapThumb.onmouseenter = function() {
+            mapThumb.classList.add("expanded");
+            closeMapBtn.style.display = "block";
+            setTimeout(() => { map.invalidateSize(); }, 300);
+        };
+        mapThumb.onmouseleave = function() {
+            mapThumb.classList.remove("expanded");
+            closeMapBtn.style.display = "none";
+            // The line that hid the confirm button is removed from here.
+            setTimeout(() => { map.invalidateSize(); }, 300);
+        };
+        closeMapBtn.onclick = function(e) {
+            mapThumb.classList.remove("expanded");
+            closeMapBtn.style.display = "none";
+            // The line that hid the confirm button is removed from here.
+            setTimeout(() => { map.invalidateSize(); }, 300);
+            e.stopPropagation();
+        };
+    }
+    map.on('click', function(e) {
+        if (userMarker) map.removeLayer(userMarker);
+        userMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+        confirmMapBtn.style.display = "block";
+    });
+    confirmMapBtn.onclick = function(event) {
+        event.stopPropagation();
+        if (userMarker) {
+            const latlng = userMarker.getLatLng();
+            guessCityByCoords(latlng.lat, latlng.lng);
+            confirmMapBtn.style.display = "none";
+        }
+    };
+
     // --- Popup Logic ---
     function showPopup() {
         const popup = document.getElementById("popup");
         popup.style.display = "block";
-        popup.classList.add("fade-in");
     }
     function closePopup() {
-        const popup = document.getElementById("popup");
-        popup.classList.remove("fade-in");
-        popup.classList.add("fade-out");
-        setTimeout(() => { popup.style.display = "none"; popup.classList.remove("fade-out"); }, 300);
+        document.getElementById("popup").style.display = "none";
     }
+    document.getElementById("help-top-btn").onclick = showPopup;
 
     // --- Settings ---
-    document.getElementById("settings-top-btn").onclick = showSettingsPopup;
-    function showSettingsPopup() {
+    document.getElementById("settings-top-btn").onclick = function() {
         document.getElementById("settings-popup").style.display = "block";
-    }
+    };
     function closeSettingsPopup() {
         document.getElementById("settings-popup").style.display = "none";
     }
     document.getElementById("dark-mode-toggle").onchange = function() {
-        if(this.checked) document.body.classList.add("dark-mode");
-        else document.body.classList.remove("dark-mode");
+        if(this.checked) {
+            document.body.classList.remove("light-mode");
+            document.body.classList.add("dark-mode");
+        } else {
+            document.body.classList.remove("dark-mode");
+            document.body.classList.add("light-mode");
+        }
     };
-    document.body.classList.add("dark-mode");
-    document.getElementById("dark-mode-toggle").checked = true;
 
     // --- Hint ---
     document.getElementById("hint-btn").onclick = function() {
         document.getElementById("hint-message").innerHTML =
-            `<div class="result-card fade-in" style="margin-top:10px;">
+            `<div class="result-card" style="margin-top:10px;">
                 التلميح: المدينة تقع في منطقة <b>${selectedCity.province}</b>
             </div>`;
     };
@@ -406,9 +586,9 @@ button:hover {
         let arrow = getDirectionArrow(lat, lng, correctCoords[0], correctCoords[1]);
         showLoadingBar(() => {
             if (dist < selectedCity.radius) {
-                showResult(true, dist, arrow);
+                showResult(true);
             } else if (attempts >= 5) {
-                showResult(false, dist, arrow);
+                showResult(false);
             } else {
                 showHint(dist, arrow);
                 if (currentImage < images.length - 1) {
@@ -471,29 +651,40 @@ button:hover {
             </div>
         `;
     }
-    function showResult(win, dist, arrow) {
-    document.getElementById("hint-btn").style.display = "none"; // Hide hint button
-    if(win){
-        markCitySolved(cityIndex);
-        document.getElementById("result").innerHTML = `
-            <div class="result-card" style="background:#c8e6c9; color:#256029; font-size:1.5em; border:2px solid #388e3c;">
-                ✅ أحسنت! الإجابة صحيحة 🎉<br>${correctCity}
-            </div>`;
+    function showResult(win) {
+        document.getElementById("hint-btn").style.display = "none";
         document.getElementById("map-thumb").style.display = "none";
         document.getElementById("main-image").style.display = "none";
+
+        if(win){
+            markCitySolved(cityIndex);
+            document.getElementById("result").innerHTML = `
+                <div class="result-card" style="background:#c8e6c9; color:#256029; font-size:1.5em; border:2px solid #388e3c;">
+                    ✅ أحسنت! الإجابة صحيحة 🎉<br>${correctCity}
+                </div>`;
+            let streak = Number(localStorage.getItem("currentStreak") || 0) + 1;
+            let maxStreak = Math.max(streak, Number(localStorage.getItem("maxStreak") || 0));
+            localStorage.setItem("currentStreak", streak);
+            localStorage.setItem("maxStreak", maxStreak);
+            let triesStats = JSON.parse(localStorage.getItem("triesStats") || "[0,0,0,0,0]");
+            triesStats[attempts-1] = (triesStats[attempts-1] || 0) + 1;
+            localStorage.setItem("triesStats", JSON.stringify(triesStats));
+        } else {
+            document.getElementById("result").innerHTML = `
+                <div class="result-card" style="background:#ffcdd2; color:#b71c1c; font-size:1.5em; border:2px solid #b71c1c;">
+                    ❌ انتهت المحاولات أو الإجابة خاطئة<br>المدينة الصحيحة: ${correctCity}
+                </div>`;
+            localStorage.setItem("currentStreak", 0);
+            let triesStats = JSON.parse(localStorage.getItem("triesStats") || "[0,0,0,0,0]");
+            triesStats[4] = (triesStats[4] || 0) + 1;
+            localStorage.setItem("triesStats", JSON.stringify(triesStats));
+        }
         showQuiz();
-        showWinPopup();
-    } else {
-        document.getElementById("result").innerHTML = `
-            <div class="result-card" style="background:#ffcdd2; color:#b71c1c; font-size:1.5em; border:2px solid #b71c1c;">
-                ❌ انتهت المحاولات أو الإجابة خاطئة<br>المدينة الصحيحة: ${correctCity}
-            </div>`;
-        showQuiz();
-        showGallery();
+        showWinPopup(); 
     }
-}
     function showQuiz(){
         let quizDiv = document.getElementById("quiz");
+        if (!quizDiv) return;
         let quizArr = selectedCity.quiz;
         let html = `<div class="quiz"><h3>حاب تختبر نفسك في ${correctCity}؟</h3>`;
         quizArr.forEach((q, idx) => {
@@ -520,144 +711,56 @@ button:hover {
             };
         });
     }
+
+    // --- Win Popup and Stats Button Logic ---
+    document.getElementById("stats-top-btn").onclick = function() {
+        const cityFinished = document.getElementById("main-image").style.display === "none" ||
+                             document.getElementById("map-thumb").style.display === "none";
+        if (cityFinished) {
+            showWinPopup();
+        }
+    };
     function showWinPopup() {
-        let streak = Number(localStorage.getItem("currentStreak") || 0) + 1;
-        let maxStreak = Math.max(streak, Number(localStorage.getItem("maxStreak") || 0));
-        localStorage.setItem("currentStreak", streak);
-        localStorage.setItem("maxStreak", maxStreak);
+        let streak = Number(localStorage.getItem("currentStreak") || 0);
+        let maxStreak = Number(localStorage.getItem("maxStreak") || 0);
         document.getElementById("current-streak").textContent = streak;
         document.getElementById("max-streak").textContent = maxStreak;
+
         document.getElementById("win-popup").style.display = "block";
         document.getElementById("win-content-default").style.display = "block";
         document.getElementById("win-content-stats").style.display = "none";
         document.getElementById("tab-default").style.fontWeight = "bold";
         document.getElementById("tab-stats").style.fontWeight = "normal";
+
         document.getElementById("share-btn").onclick = function() {
-            let shareText = `SaudiDle\nاليوم: ${correctCity}\nعدد المحاولات: ${attempts}\nسلسلتك الحالية: ${streak}\nأعلى سلسلة: ${maxStreak}\nجرب بنفسك: https://yourwebsite.com`;
+            let shareText = `SaudiLe\nاليوم: ${correctCity}\nعدد المحاولات: ${attempts}\nسلسلتك الحالية: ${streak}\nأعلى سلسلة: ${maxStreak}\nجرب بنفسك: https://yourwebsite.com`;
             navigator.clipboard.writeText(shareText);
             this.textContent = "تم النسخ!";
             setTimeout(() => { this.textContent = "مشاركة النتيجة"; }, 1500);
         };
         document.getElementById("tab-default").onclick = function() {
-            const statsDiv = document.getElementById("win-content-stats");
-            const defaultDiv = document.getElementById("win-content-default");
-            statsDiv.classList.remove("fade-in");
-            statsDiv.classList.add("fade-out");
-            setTimeout(() => {
-                statsDiv.style.display = "none";
-                defaultDiv.style.display = "block";
-                defaultDiv.classList.add("fade-in");
-                document.getElementById("tab-default").style.fontWeight = "bold";
-                document.getElementById("tab-stats").style.fontWeight = "normal";
-                setTimeout(() => defaultDiv.classList.remove("fade-in"), 400);
-                statsDiv.classList.remove("fade-out");
-            }, 300);
+            document.getElementById("win-content-default").style.display = "block";
+            document.getElementById("win-content-stats").style.display = "none";
+            document.getElementById("tab-default").style.fontWeight = "bold";
+            document.getElementById("tab-stats").style.fontWeight = "normal";
         };
         document.getElementById("tab-stats").onclick = function() {
-            const statsDiv = document.getElementById("win-content-stats");
-            const defaultDiv = document.getElementById("win-content-default");
-            defaultDiv.classList.remove("fade-in");
-            defaultDiv.classList.add("fade-out");
-            setTimeout(() => {
-                defaultDiv.style.display = "none";
-                statsDiv.style.display = "block";
-                statsDiv.classList.add("fade-in");
-                document.getElementById("tab-stats").style.fontWeight = "bold";
-                document.getElementById("tab-default").style.fontWeight = "normal";
-                renderStats();
-                setTimeout(() => statsDiv.classList.remove("fade-in"), 400);
-                defaultDiv.classList.remove("fade-out");
-            }, 300);
+            document.getElementById("win-content-default").style.display = "none";
+            document.getElementById("win-content-stats").style.display = "block";
+            document.getElementById("tab-stats").style.fontWeight = "bold";
+            document.getElementById("tab-default").style.fontWeight = "normal";
+            renderStats();
         };
     }
     function closeWinPopup() {
         document.getElementById("win-popup").style.display = "none";
-        showGallery();
+        if (
+            document.getElementById("main-image").style.display === "none" ||
+            document.getElementById("map-thumb").style.display === "none"
+        ) {
+            showGallery();
+        }
     }
-
-// --- Map Section ---
-// Improved: expand on hover, marker/confirm logic, confirm button hides correctly
-
-// --- Map Section ---
-// Improved: expand/collapse logic for desktop and mobile, confirm button hides correctly
-
-let map = L.map('map-thumb', { zoomControl: false, attributionControl: false }).setView([23.8859, 45.0792], 5);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
-let userMarker = null;
-
-const mapThumb = document.getElementById("map-thumb");
-const closeMapBtn = document.getElementById("close-map-btn");
-const confirmMapBtn = document.getElementById("confirm-map-btn");
-
-// Device check
-function isMobile() {
-    return window.innerWidth <= 600;
-}
-
-// Expand/collapse logic
-if (isMobile()) {
-    mapThumb.onclick = function() {
-        mapThumb.classList.add("expanded");
-        closeMapBtn.style.display = "block";
-        setTimeout(() => { map.invalidateSize(); }, 300);
-    };
-    closeMapBtn.onclick = function(e) {
-        mapThumb.classList.remove("expanded");
-        closeMapBtn.style.display = "none";
-        confirmMapBtn.style.display = "none";
-        setTimeout(() => { map.invalidateSize(); }, 300);
-        e.stopPropagation();
-    };
-} else {
-    mapThumb.onmouseenter = function() {
-        mapThumb.classList.add("expanded");
-        closeMapBtn.style.display = "block";
-        setTimeout(() => { map.invalidateSize(); }, 300);
-    };
-    mapThumb.onmouseleave = function() {
-        mapThumb.classList.remove("expanded");
-        closeMapBtn.style.display = "none";
-        confirmMapBtn.style.display = "none";
-        setTimeout(() => { map.invalidateSize(); }, 300);
-    };
-    closeMapBtn.onclick = function(e) {
-        mapThumb.classList.remove("expanded");
-        closeMapBtn.style.display = "none";
-        confirmMapBtn.style.display = "none";
-        setTimeout(() => { map.invalidateSize(); }, 300);
-        e.stopPropagation();
-    };
-}
-
-// Place marker and show confirm button
-map.on('click', function(e) {
-    if (userMarker) map.removeLayer(userMarker);
-    userMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
-    confirmMapBtn.style.display = "block";
-});
-
-// Confirm guess and hide confirm button
-confirmMapBtn.onclick = function(event) {
-    event.stopPropagation(); // Prevents map click from firing
-    if (userMarker) {
-        const latlng = userMarker.getLatLng();
-        guessCityByCoords(latlng.lat, latlng.lng);
-        confirmMapBtn.style.display = "none";
-    }
-};
-// Hide confirm button when loading a new city
-function loadCity(idx) {
-    // ...existing code...
-    if (userMarker) {
-        map.removeLayer(userMarker);
-        userMarker = null;
-    }
-    confirmMapBtn.style.display = "none";
-    // ...existing code...
-}
-
-
-
     function showGallery() {
         document.getElementById("image-container").style.display = "none";
         const galleryDiv = document.getElementById("gallery");
@@ -679,8 +782,6 @@ function loadCity(idx) {
     function renderStats() {
         const attemptEmojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣"];
         let triesStats = JSON.parse(localStorage.getItem("triesStats") || "[0,0,0,0,0]");
-        triesStats[attempts-1] = (triesStats[attempts-1] || 0) + 1;
-        localStorage.setItem("triesStats", JSON.stringify(triesStats));
         let total = triesStats.reduce((a,b)=>a+b,0) || 1;
         let barHtml = `<div style="text-align:right; margin-bottom:10px;">عدد محاولاتك في الايام السابقة:</div>`;
         for(let i=0; i<5; i++) {
@@ -710,30 +811,26 @@ function loadCity(idx) {
         document.getElementById("vertical-bar").innerHTML = vBarHtml;
     }
     function loadCity(idx) {
-    cityIndex = idx;
-    selectedCity = cityData[cityIndex];
-    images = selectedCity.images;
-    currentImage = 0;
-    correctCity = selectedCity.name;
-    correctCoords = selectedCity.coords;
-    attempts = 0;
-    document.getElementById("main-image").src = images[0];
-    updateCityNumber();
-    document.getElementById("result").innerHTML = "";
-    document.getElementById("quiz").innerHTML = "";
-    document.getElementById("hint-message").innerHTML = "";
-    document.getElementById("image-container").style.display = "block";
-    document.getElementById("main-image").style.display = "block";
-    document.getElementById("gallery").style.display = "none";
-    document.getElementById("map-thumb").style.display = "block";
-    if (userMarker) {
-        map.removeLayer(userMarker);
-        userMarker = null;
+        cityIndex = idx;
+        selectedCity = cityData[cityIndex];
+        images = selectedCity.images;
+        currentImage = 0;
+        correctCity = selectedCity.name;
+        correctCoords = selectedCity.coords;
+        attempts = 0;
+        document.getElementById("main-image").src = images[0];
+        document.getElementById("result").innerHTML = "";
+        document.getElementById("quiz").innerHTML = "";
+        document.getElementById("hint-message").innerHTML = "";
+        document.getElementById("image-container").style.display = "block";
+        document.getElementById("main-image").style.display = "block";
+        document.getElementById("gallery").style.display = "none";
+        document.getElementById("map-thumb").style.display = "block";
+        document.getElementById("hint-btn").style.display = "inline-block";
+        if (userMarker) {
+            map.removeLayer(userMarker);
+            userMarker = null;
+        }
+        confirmMapBtn.style.display = "none";
     }
-    confirmMapBtn.style.display = "none";
-}
-    document.getElementById("stats-top-btn").onclick = showWinPopup;
-    document.getElementById("help-top-btn").onclick = showPopup;
-    </script>
-</body>
-</html>
+</script>
