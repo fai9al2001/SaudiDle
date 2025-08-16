@@ -843,12 +843,37 @@
         document.getElementById("tab-default").style.fontWeight = "bold";
         document.getElementById("tab-stats").style.fontWeight = "normal";
 
-        document.getElementById("share-btn").onclick = function() {
+        document.getElementById("share-btn").onclick = async function() {
             const emojiString = guessHistory.join('');
-            const shareText = `#SAUDILE ${attempts}/5\n${emojiString}\n\nhttps://faisalk00.github.io/SaudiLe/`;
-            navigator.clipboard.writeText(shareText);
-            this.textContent = "تم النسخ!";
-            setTimeout(() => { this.textContent = "مشاركة النتيجة"; }, 1500);
+            const shareTitle = 'SaudiLe';
+            // Construct the text with the city number
+            const shareBody = `#SAUDILE #${cityIndex + 1}\n${attempts}/5\n${emojiString}`;
+            const shareUrl = 'https://faisalk00.github.io/SaudiLe/';
+            const fullShareText = `${shareBody}\n\n${shareUrl}`;
+
+            // Check if the native Web Share API is supported (for mobile)
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: shareTitle,
+                        text: fullShareText,
+                    });
+                    // The 'this' context might be lost in async, so we select the button again
+                    document.getElementById("share-btn").textContent = "تمت المشاركة!";
+                } catch (err) {
+                    // User cancelled the share, do nothing or handle error
+                    console.log('Error sharing:', err);
+                }
+            } else {
+                // Fallback for desktop browsers: copy to clipboard
+                navigator.clipboard.writeText(fullShareText);
+                this.textContent = "تم النسخ!";
+            }
+
+            // Reset button text after a delay
+            setTimeout(() => {
+                document.getElementById("share-btn").textContent = "مشاركة النتيجة";
+            }, 2000);
         };
         document.getElementById("tab-default").onclick = function() {
             document.getElementById("win-content-default").style.display = "block";
